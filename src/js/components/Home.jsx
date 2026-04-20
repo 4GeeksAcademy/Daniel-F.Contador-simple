@@ -1,17 +1,15 @@
 import React from "react";
-import Contador from "./Counter";
+import Contador from "/workspaces/Daniel-F.Contador-simple/src/js/components/Counter.jsx";
 
 //include images into your bundle
 
 //create your first component
 const Home = () => {
-	return (
-<div>
-      <h2>Contador</h2>
-      {}
-      <Contador /> 
+  return (
+    <div className="position-absolute top-50 start-50 translate-middle">
+      <Contador />
     </div>
-	);
+  );
 };
 
 export default Home;

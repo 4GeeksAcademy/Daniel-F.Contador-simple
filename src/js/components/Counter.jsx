@@ -5,7 +5,7 @@ function Contador() {
   const [contador, setContador] = useState(0);
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+    <div style={{ textAlign: 'center', marginTop: '50px',}}>
       <h1>Contador: {contador}</h1>
       <button onClick={() => setContador(contador - 1)}>Restar</button>
       <button onClick={() => setContador(0)}>Reiniciar</button>
