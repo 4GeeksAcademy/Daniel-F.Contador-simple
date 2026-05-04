@@ -5,8 +5,11 @@ import Controls from './Controls';
 const Home = () => {
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(true);
-  const [targetTime, setTargetTime] = useState(null);
-  const [isCountdown, setIsCountdown] = useState(false); // Nueva bandera
+  
+  // Variables específicas para la cuenta atrás y la alerta
+  const [isCountdown, setIsCountdown] = useState(false);
+  const [countdownStart, setCountdownStart] = useState(0); // Punto de partida independiente
+  const [alertAt, setAlertAt] = useState(null);           // Punto de alerta independiente
   
   const intervalRef = useRef(null);
 
@@ -14,13 +17,11 @@ const Home = () => {
     if (isActive) {
       intervalRef.current = setInterval(() => {
         setTimer(prev => {
-          // Si es cuenta atrás y llega a 0, paramos
           if (isCountdown) {
             if (prev > 0) return prev - 1;
-            setIsActive(false);
+            setIsActive(false); // Detener al llegar a 0
             return 0;
           }
-          // Si no, sumamos normalmente
           return prev + 1;
         });
       }, 1000);
@@ -30,22 +31,19 @@ const Home = () => {
     return () => clearInterval(intervalRef.current);
   }, [isActive, isCountdown]);
 
-  // Lógica para la alerta
+  // Lógica de alerta corregida: Usamos la variable alertAt
   useEffect(() => {
-    if (targetTime !== null && targetTime !== "" && timer === parseInt(targetTime)) {
-      alert(`¡Atención! Se ha alcanzado el tiempo de ${targetTime} segundos.`);
+    if (alertAt !== null && alertAt !== "" && timer === parseInt(alertAt)) {
+      alert(`¡Atención! Se ha alcanzado el tiempo programado: ${alertAt} segundos.`);
     }
-  }, [timer, targetTime]);
+  }, [timer, alertAt]);
 
-  // Función para manejar el punto de inicio
-  const handleSetStartValue = (val) => {
-    const value = parseInt(val);
-    if (!isNaN(value)) {
-      setTimer(value);
-      setIsCountdown(value > 0); // Si el valor es > 0, activamos modo cuenta atrás
-    } else {
-      setTimer(0);
-      setIsCountdown(false);
+  // Función para aplicar el inicio de la cuenta atrás
+  const handleApplyCountdown = () => {
+    if (countdownStart > 0) {
+      setTimer(countdownStart);
+      setIsCountdown(true);
+      setIsActive(true);
     }
   };
 
@@ -58,9 +56,12 @@ const Home = () => {
         onReset={() => {
           setTimer(0);
           setIsCountdown(false);
+          setAlertAt(null);
         }}
-        onSetTarget={(val) => setTargetTime(val)}
-        onSetStartValue={handleSetStartValue}
+        // Pasamos las funciones para actualizar nuestros nuevos estados
+        onSetAlert={(val) => setAlertAt(val)}
+        onSetCountdownStart={(val) => setCountdownStart(parseInt(val))}
+        onStartCountdown={handleApplyCountdown}
       />
     </div>
   );

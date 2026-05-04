@@ -1,28 +1,39 @@
 import React from 'react';
 
-const Controls = ({ onStop, onResume, onReset, onSetTarget, onSetStartValue }) => {
+const Controls = ({ onStop, onResume, onReset, onSetAlert, onSetCountdownStart, onStartCountdown }) => {
   return (
-    <div style={{ textAlign: 'center', marginTop: '20px' }}>
-      <button onClick={onStop}>Parar</button>
-      <button onClick={onResume}>Resumir</button>
-      <button onClick={onReset}>Reiniciar</button>
-      
-      <div style={{ marginTop: '10px' }}>
-        <label>Cuenta regresiva desde: </label>
-        <input 
-          type="number" 
-          placeholder="Segundos iniciales..." 
-          onChange={(e) => onSetStartValue(e.target.value)} 
-        />
+    <div className="container text-center mt-4">
+      <div className="btn-group mb-4">
+        <button className="btn btn-outline-danger" onClick={onStop}>Parar</button>
+        <button className="btn btn-outline-success" onClick={onResume}>Resumir</button>
+        <button className="btn btn-outline-secondary" onClick={onReset}>Reiniciar</button>
       </div>
 
-      <div style={{ marginTop: '10px' }}>
-        <label>Alerta en: </label>
-        <input 
-          type="number" 
-          placeholder="Segundos para alerta..." 
-          onChange={(e) => onSetTarget(e.target.value)} 
-        />
+      <div className="row justify-content-center">
+        {/* Input para Punto de Partida */}
+        <div className="col-md-3 mb-3">
+          <label className="form-label">Iniciar cuenta atrás en:</label>
+          <div className="input-group">
+            <input 
+              type="number" 
+              className="form-control"
+              placeholder="Segundos..." 
+              onChange={(e) => onSetCountdownStart(e.target.value)} 
+            />
+            <button className="btn btn-primary" onClick={onStartCountdown}>Ir</button>
+          </div>
+        </div>
+
+        {/* Input para la Alerta */}
+        <div className="col-md-3 mb-3">
+          <label className="form-label">Lanzar alerta en:</label>
+          <input 
+            type="number" 
+            className="form-control"
+            placeholder="Ej: 10" 
+            onChange={(e) => onSetAlert(e.target.value)} 
+          />
+        </div>
       </div>
     </div>
   );
